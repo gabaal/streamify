@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-// User schema definition
-// This schema defines the structure of the user document in the MongoDB database
 const userSchema = new mongoose.Schema(
   {
     fullName: {
@@ -53,8 +51,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Middleware to hash the password before saving the user
-// This middleware will be executed before the user document is saved to the database
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
@@ -67,13 +63,8 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-// Method to check if the password is correct
-// This method will be used to compare the password entered by the user with the hashed password stored in the database
 userSchema.methods.matchPassword = async function (enteredPassword) {
-  const isPasswordCorrect = await bcrypt.compare(
-    enteredPassword,
-    this.password
-  );
+  const isPasswordCorrect = await bcrypt.compare(enteredPassword, this.password);
   return isPasswordCorrect;
 };
 
